@@ -1,6 +1,8 @@
 import { existsSync } from 'node:fs'
 import type { Nuxt } from 'nuxt/schema'
 import type { Resolver } from '@nuxt/kit'
+import { addCustomTab, extendServerRpc } from '@nuxt/devtools-kit'
+//import { execaCommand } from 'execa'
 
 const DEVTOOLS_UI_ROUTE = '/__vue-mess-detector'
 const DEVTOOLS_UI_LOCAL_PORT = 3300
@@ -33,19 +35,36 @@ export function setupDevToolsUI(nuxt: Nuxt, resolver: Resolver) {
     })
   }
 
-  nuxt.hook('devtools:customTabs', (tabs) => {
-    tabs.push({
-      // unique identifier
-      name: 'vue-mess-detector',
-      // title to display in the tab
-      title: 'Vue Mess Detector',
-      // any icon from Iconify, or a URL to an image
-      icon: 'tabler:analyze',
-      // iframe view
-      view: {
-        type: 'iframe',
-        src: DEVTOOLS_UI_ROUTE,
-      },
-    })
+  addCustomTab({
+    name: 'vue-mess-detector',
+    title: 'Vue Mess Detector',
+    icon: 'tabler:analyze',
+    view: {
+      type: 'iframe',
+      src: DEVTOOLS_UI_ROUTE,
+    },
   })
+
+  // extendServerRpc('vue-mess-detector', {
+  //   analyze: async () => {
+  //     return 'gauranga'
+  // try {
+  //   const { stdout } = await execaCommand('npx vue-mess-detector analyze')
+  //   return stdout
+  // } catch (error) {
+  //   console.error('Error running vue-mess-detector:', error)
+  //   return 'Error running vue-mess-detector'
+  // }
+  //   }
+  // })
+  try {
+    const rpc = extendServerRpc('vue-mess-detector', {
+      analyze: async () => {
+        return 'hello'
+      }
+    })
+    console.log('RPC extension successful:', rpc)
+  } catch (error) {
+    console.error('Failed to extend server RPC:', error)
+  }
 }

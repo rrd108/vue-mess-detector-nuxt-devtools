@@ -46,8 +46,8 @@
     "changelogen": "^0.5.5",
     "eslint": "^9.9.1",
     "nuxt": "^3.12.4",
-    "vitest": "^2.0.5",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "vitest": "^2.0.5"
   },
   "packageManager": "yarn@1.22.21+sha1.1959a18351b811cdeedbd484a8f86c3cc3bbaf72"
 }

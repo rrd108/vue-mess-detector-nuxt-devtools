@@ -1,37 +1,49 @@
 <script setup lang="ts">
+import { ref, onMounted } from "vue";
 import { useDevtoolsClient } from "@nuxt/devtools-kit/iframe-client";
 
-const client = useDevtoolsClient();
+const analysisResult = ref("");
+const isLoading = ref(false);
+
+const devtoolsClient = useDevtoolsClient();
+
+async function runAnalysis() {
+  if (!devtoolsClient.value) return;
+
+  isLoading.value = true;
+  try {
+    const rpc =
+      devtoolsClient.value.devtools.extendClientRpc("vue-mess-detector");
+    analysisResult.value = await rpc.analyze();
+  } catch (error) {
+    console.error("Error running analysis:", error);
+    analysisResult.value = `Error running analysis: ${JSON.stringify(
+      error,
+      null,
+      2
+    )}`;
+  } finally {
+    isLoading.value = false;
+  }
+}
 </script>
 
 <template>
-  <div class="relative p-10 n-bg-base flex flex-col h-screen">
-    <h1 class="text-3xl font-bold">Vue Mess Detector</h1>
-    <div class="opacity-50 mb-4">Nuxt DevTools Integration</div>
-    <div v-if="client" class="flex flex-col gap-2">
-      <NTip n="green" icon="carbon-checkmark">
-        Nuxt DevTools is connected
-      </NTip>
-      <div>
-        The current app is using
-        <code class="text-green"
-          >vue@{{ client.host.nuxt.vueApp.version }}</code
-        >
-      </div>
-      <div>
-        <NButton n="green" class="mt-4" @click="client!.host.devtools.close()">
-          Close DevTools
-        </NButton>
-      </div>
-    </div>
-    <div v-else>
-      <NTip n="yellow">
-        Failed to connect to the client. Did you open this page inside Nuxt
-        DevTools?
-      </NTip>
-    </div>
-
-    <div class="flex-auto" />
-    <ModuleAuthorNote class="mt-5" />
+  <div>
+    <h1>Vue Mess Detector Analysis</h1>
+    <button :disabled="isLoading" @click="runAnalysis">
+      {{ isLoading ? "Running..." : "Run Analysis" }}
+    </button>
+    <pre v-if="analysisResult">{{ analysisResult }}</pre>
   </div>
 </template>
+
+<style scoped>
+button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+</style>

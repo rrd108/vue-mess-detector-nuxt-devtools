@@ -24,10 +24,14 @@ export default defineNuxtConfig({
         clientPort: +(process.env.PORT || 3300),
       },
     },
+    build: {
+      rollupOptions: {
+      }
+    }
   },
 
   devtools: {
-    enabled: false,
+    enabled: true,
   },
 
   compatibilityDate: '2024-08-21',
