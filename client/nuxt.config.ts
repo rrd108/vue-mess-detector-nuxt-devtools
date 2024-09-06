@@ -24,10 +24,6 @@ export default defineNuxtConfig({
         clientPort: +(process.env.PORT || 3300),
       },
     },
-    build: {
-      rollupOptions: {
-      }
-    }
   },
 
   devtools: {

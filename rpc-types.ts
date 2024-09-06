@@ -2,6 +2,6 @@ export interface ServerFunctions {
     analyze: () => Promise<string>
 }
 
-// export interface ClientFunctions {
-//     showNotification: (message: string) => void
-// }
+export interface ClientFunctions {
+    showOutput: (output: string) => void
+}
