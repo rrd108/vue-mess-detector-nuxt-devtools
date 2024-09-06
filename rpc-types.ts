@@ -1,7 +1,9 @@
+import { Readable } from 'stream'
+
 export interface ServerFunctions {
-    analyze: () => Promise<string>
+    executeLsCommand: () => Promise<string | Readable>
 }
 
 export interface ClientFunctions {
-    showOutput: (output: string) => void
+    displayLsResults: (results: string | Readable) => void;
 }

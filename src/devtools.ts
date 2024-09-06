@@ -1,13 +1,13 @@
 import { existsSync } from 'node:fs'
 import type { Nuxt } from 'nuxt/schema'
 import type { Resolver } from '@nuxt/kit'
-import { addCustomTab, extendServerRpc } from '@nuxt/devtools-kit'
-//import { execaCommand } from 'execa'
+import { addCustomTab } from '@nuxt/devtools-kit'
 
 const DEVTOOLS_UI_ROUTE = '/__vue-mess-detector'
 const DEVTOOLS_UI_LOCAL_PORT = 3300
 
 export function setupDevToolsUI(nuxt: Nuxt, resolver: Resolver) {
+  console.log('devtools:setupDevToolsUI')
   const clientPath = resolver.resolve('./client')
   const isProductionBuild = existsSync(clientPath)
 
@@ -21,8 +21,8 @@ export function setupDevToolsUI(nuxt: Nuxt, resolver: Resolver) {
       )
     })
   }
-  // In local development, start a separate Nuxt Server and proxy to serve the client
-  else {
+
+  if (!isProductionBuild) { // In local development, start a separate Nuxt Server and proxy to serve the client
     nuxt.hook('vite:extendConfig', (config) => {
       config.server = config.server || {}
       config.server.proxy = config.server.proxy || {}
@@ -44,27 +44,4 @@ export function setupDevToolsUI(nuxt: Nuxt, resolver: Resolver) {
       src: DEVTOOLS_UI_ROUTE,
     },
   })
-
-  // extendServerRpc('vue-mess-detector', {
-  //   analyze: async () => {
-  //     return 'gauranga'
-  // try {
-  //   const { stdout } = await execaCommand('npx vue-mess-detector analyze')
-  //   return stdout
-  // } catch (error) {
-  //   console.error('Error running vue-mess-detector:', error)
-  //   return 'Error running vue-mess-detector'
-  // }
-  //   }
-  // })
-  try {
-    const rpc = extendServerRpc('vue-mess-detector', {
-      analyze: async () => {
-        return 'hello'
-      }
-    })
-    console.log('RPC extension successful:', rpc)
-  } catch (error) {
-    console.error('Failed to extend server RPC:', error)
-  }
 }

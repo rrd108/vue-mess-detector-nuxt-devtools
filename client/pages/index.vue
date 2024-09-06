@@ -1,44 +1,44 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import { useDevtoolsClient } from "@nuxt/devtools-kit/iframe-client";
+import { Readable } from "stream";
+import { onDevtoolsClientConnected } from "@nuxt/devtools-kit/iframe-client";
 
-const analysisResult = ref("");
-const isLoading = ref(false);
+const result = ref("");
 
-const devtoolsClient = useDevtoolsClient();
-
-async function runAnalysis() {
-  if (!devtoolsClient.value) return;
-
-  isLoading.value = true;
-  try {
-    const rpc =
-      devtoolsClient.value.devtools.extendClientRpc("vue-mess-detector");
-    analysisResult.value = await rpc.analyze();
-  } catch (error) {
-    console.error("Error running analysis:", error);
-    analysisResult.value = `Error running analysis: ${JSON.stringify(
-      error,
-      null,
-      2
-    )}`;
-  } finally {
-    isLoading.value = false;
-  }
-}
+onDevtoolsClientConnected(async (client) => {
+  const rpc = client.devtools.extendClientRpc("vue-mess-detector", {
+    displayLsResults: (results: string | Readable) => {
+      if (results instanceof Readable) {
+        // Convert Readable stream to string
+        const chunks: string[] = [];
+        results.on("data", (chunk) => chunks.push(chunk.toString()));
+        results.on("end", () => {
+          result.value = chunks.join("");
+        });
+      } else {
+        result.value = results;
+      }
+    },
+  });
+});
 </script>
 
 <template>
   <div>
     <h1>Vue Mess Detector Analysis</h1>
-    <button :disabled="isLoading" @click="runAnalysis">
-      {{ isLoading ? "Running..." : "Run Analysis" }}
-    </button>
-    <pre v-if="analysisResult">{{ analysisResult }}</pre>
+    <button>Run Analysis</button>
+    {{ result ? "Loading" : result }}
   </div>
 </template>
 
 <style scoped>
+div {
+  padding: 1em;
+}
+h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1em;
+}
 button {
   background-color: #007bff;
   color: white;
