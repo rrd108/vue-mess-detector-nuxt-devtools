@@ -1,3 +1,6 @@
 {
-  "extends": "./client/.nuxt/tsconfig.json"
+  "extends": "./client/.nuxt/tsconfig.json",
+  "compilerOptions": {
+    "preserveSymlinks": true
+  }
 }

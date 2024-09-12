@@ -1,49 +1,28 @@
 <script setup lang="ts">
-import { Readable } from "stream";
 import { onDevtoolsClientConnected } from "@nuxt/devtools-kit/iframe-client";
+import type { ServerFunctions } from "../../rpc-types";
 
 const result = ref("");
 
 onDevtoolsClientConnected(async (client) => {
-  const rpc = client.devtools.extendClientRpc("vue-mess-detector", {
-    displayLsResults: (results: string | Readable) => {
-      if (results instanceof Readable) {
-        // Convert Readable stream to string
-        const chunks: string[] = [];
-        results.on("data", (chunk) => chunks.push(chunk.toString()));
-        results.on("end", () => {
-          result.value = chunks.join("");
-        });
-      } else {
-        result.value = results;
-      }
-    },
-  });
+  console.log("onDevtoolsClientConnected");
+
+  // Use the correct RPC structure
+  const rpc = client.devtools.rpc as unknown as ServerFunctions;
+
+  // Call server RPC function
+  result.value = await rpc.getResults();
+
+  // You can also call the showNotification method if needed
+  // client.devtools.rpc.broadcast.showNotification("Results fetched successfully")
 });
 </script>
 
 <template>
   <div>
     <h1>Vue Mess Detector Analysis</h1>
-    <button>Run Analysis</button>
-    {{ result ? "Loading" : result }}
+    <pre>{{ result }}</pre>
   </div>
 </template>
 
-<style scoped>
-div {
-  padding: 1em;
-}
-h1 {
-  font-size: 2rem;
-  font-weight: bold;
-  margin-bottom: 1em;
-}
-button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  cursor: pointer;
-}
-</style>
+<style scoped></style>

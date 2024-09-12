@@ -1,9 +1,13 @@
-import { Readable } from 'stream'
+export interface AnalysisResult {
+    output: { info: string }[]
+    reportOutput: Record<string, Array<{ id: string; description: string; message: string }>>
+    codeHealthOutput?: { info: string }[]
+}
 
 export interface ServerFunctions {
-    executeLsCommand: () => Promise<string | Readable>
+    getResults: () => Promise<AnalysisResult>
 }
 
 export interface ClientFunctions {
-    displayLsResults: (results: string | Readable) => void;
+    showNotification: (message: string) => void
 }
