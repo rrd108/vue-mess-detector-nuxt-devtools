@@ -1,20 +1,18 @@
 <script setup lang="ts">
 import { onDevtoolsClientConnected } from "@nuxt/devtools-kit/iframe-client";
-import type { ServerFunctions } from "../../rpc-types";
+import type { AnalysisResult } from "../../rpc-types";
 
-const result = ref("");
+const result = ref<AnalysisResult>({} as AnalysisResult);
 
 onDevtoolsClientConnected(async (client) => {
   console.log("onDevtoolsClientConnected");
-
-  // Use the correct RPC structure
-  const rpc = client.devtools.rpc as unknown as ServerFunctions;
-
-  // Call server RPC function
-  result.value = await rpc.getResults();
-
-  // You can also call the showNotification method if needed
-  // client.devtools.rpc.broadcast.showNotification("Results fetched successfully")
+  const rpc = client.devtools.rpc;
+  try {
+    const analysisResults = await rpc.vueMessDetector.getResults();
+    result.value = analysisResults;
+  } catch (error) {
+    console.error("Failed to fetch analysis results:", error);
+  }
 });
 </script>
 

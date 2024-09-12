@@ -2,15 +2,9 @@ import { defineNuxtModule, addPlugin, createResolver } from '@nuxt/kit'
 import { setupDevToolsUI } from './devtools'
 import { extendServerRpc, onDevToolsInitialized } from '@nuxt/devtools-kit'
 import { analyze } from 'vue-mess-detector'
-import type { AnalysisResult, ServerFunctions } from '../rpc-types'
+import type { ClientFunctions, ServerFunctions } from '../rpc-types'
 
-// Module options TypeScript interface definition
 export interface ModuleOptions {
-  /**
-   * Enable Nuxt Devtools integration
-   *
-   * @default true
-   */
   devtools: boolean
 }
 
@@ -36,21 +30,19 @@ export default defineNuxtModule<ModuleOptions>({
 
     onDevToolsInitialized(async () => {
       console.log('module:onDevToolsInitialized')
-      const results = await analyze({ dir: './src', apply: [], ignore: [], groupBy: 'rule', level: 'all', sortBy: 'asc' })
-      console.log({ results })
+      const results = await analyze({ dir: './src/', apply: [], ignore: [], groupBy: 'rule', level: 'all', sortBy: 'asc' })
+      console.log(results.codeHealthOutput?.[0].info)
 
-      // add a new remote procedure call method to the Nuxt Devtools server
-      const rpc = extendServerRpc<ServerFunctions>('vueMessDetector', {
-        getResults: async (): Promise<AnalysisResult> => {
-          return {
-            output: results.output,
-            reportOutput: results.reportOutput,
-            codeHealthOutput: results.codeHealthOutput
-          }
-        },
+
+      const rpc = extendServerRpc<ClientFunctions, ServerFunctions>('vueMessDetector', {
+        async getResults() {
+          console.log('getResults() called on server')
+          return results
+        }
       })
 
-      //await rpc.broadcast.showNotification('Hello from My Module!')
+      console.log('RPC object:', rpc)  // output: { broadcast: {} }
+
     })
   }
 })
