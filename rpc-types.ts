@@ -9,5 +9,5 @@ export interface ServerFunctions {
 }
 
 export interface ClientFunctions {
-    showNotification: (message: string) => void
+    _doNothing: () => void
 }

@@ -12,11 +12,7 @@ onDevtoolsClientConnected(async (client) => {
   console.log("onDevtoolsClientConnected");
   const rpc = client.devtools.extendClientRpc<ServerFunctions, ClientFunctions>(
     "vueMessDetector",
-    {
-      showNotification: (message: string) => {
-        console.log(message);
-      },
-    }
+    { _doNothing: () => {} }
   );
 
   result.value = await rpc.getResults();
