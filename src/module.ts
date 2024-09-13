@@ -1,7 +1,7 @@
 import { defineNuxtModule, addPlugin, createResolver } from '@nuxt/kit'
 import { setupDevToolsUI } from './devtools'
 import { extendServerRpc, onDevToolsInitialized } from '@nuxt/devtools-kit'
-import { analyze } from 'vue-mess-detector'
+import { analyze, FLAT_RULESETS_RULES } from 'vue-mess-detector'
 import type { ClientFunctions, ServerFunctions } from '../rpc-types'
 
 export interface ModuleOptions {
@@ -31,7 +31,7 @@ export default defineNuxtModule<ModuleOptions>({
     onDevToolsInitialized(async () => {
       console.log('module:onDevToolsInitialized')
       console.log('analyze')
-      const results = await analyze({ dir: './src/', apply: ['vue-caution', 'vue-essential', 'vue-recommended', 'vue-strong', 'rrd'], ignore: [], groupBy: 'rule', level: 'all', sortBy: 'asc' })
+      const results = await analyze({ dir: './src/', apply: FLAT_RULESETS_RULES, ignore: [], groupBy: 'rule', level: 'all', sortBy: 'asc' })
       console.log(results.codeHealthOutput?.[0].info)
 
 
