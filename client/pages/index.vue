@@ -19,8 +19,15 @@ onDevtoolsClientConnected(async (client) => {
   console.log(result.value);
 });
 
-const beautify = (str: string) =>
-  str
+const htmlize = (str: string) => {
+  const urlPattern =
+    /(\bhttps:\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gi;
+  str = str.replace(
+    urlPattern,
+    '🔗 <a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
+  );
+
+  return str
     .replace(/<bg_err>/g, '<span class="bg-err">')
     .replace(/<bg_warn>/g, '<span class="bg-warn">')
     .replace(/<bg_info>/g, '<span class="bg-info">')
@@ -28,37 +35,39 @@ const beautify = (str: string) =>
     .replace(/<\/bg_err>|<\/bg_warn>|<\/bg_info>|<\/bg_ok>/g, "</span>")
     .replace(/<text_warn>/g, '<span class="text-warn">')
     .replace(/<text_info>/g, '<span class="text-info">')
-    .replace(/<\/text_warn>|<\/text_info>/g, "</span>");
+    .replace(/<\/text_warn>|<\/text_info>/g, "</span>")
+    .replace(/\n/g, "<br>");
+};
 </script>
 
 <template>
   <div>
     <h1>Vue Mess Detector Analysis</h1>
-    <h2>Output</h2>
+    <h2>Overview</h2>
     <ul>
       <li v-for="item in result.output">
-        <p v-html="beautify(item.info)"></p>
+        <p v-html="htmlize(item.info)"></p>
       </li>
     </ul>
 
-    <h2>Report Output</h2>
+    <h2>Report</h2>
     <ul>
       <li v-for="(item, key) in result.reportOutput">
-        <h3 v-html="beautify(key)"></h3>
+        <h3 v-html="htmlize(key)"></h3>
         <ul>
           <li v-for="rule in item">
-            <p v-html="beautify(rule.id)"></p>
-            <p v-html="beautify(rule.description)"></p>
-            <p v-html="beautify(rule.message)"></p>
+            <p v-html="htmlize(rule.id)"></p>
+            <p v-html="htmlize(rule.description)"></p>
+            <p v-html="htmlize(rule.message)"></p>
           </li>
         </ul>
       </li>
     </ul>
 
-    <h2>Code Health Output</h2>
+    <h2>Code Health</h2>
     <ul>
       <li v-for="item in result.codeHealthOutput">
-        <p v-html="beautify(item.info)"></p>
+        <p v-html="htmlize(item.info)"></p>
       </li>
     </ul>
   </div>
@@ -81,6 +90,18 @@ ul ul {
   padding-left: 1rem;
 }
 
+li {
+  padding: 0.5em;
+  border-radius: 0.25em;
+}
+
+ul ul li:nth-child(even) {
+  background-color: #222;
+}
+
+:deep a {
+  text-decoration: underline;
+}
 :deep(.bg-info) {
   background-color: #3498db;
   color: #fff;
