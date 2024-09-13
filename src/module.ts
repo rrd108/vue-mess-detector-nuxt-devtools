@@ -30,7 +30,8 @@ export default defineNuxtModule<ModuleOptions>({
 
     onDevToolsInitialized(async () => {
       console.log('module:onDevToolsInitialized')
-      const results = await analyze({ dir: './src/', apply: [], ignore: [], groupBy: 'rule', level: 'all', sortBy: 'asc' })
+      console.log('analyze')
+      const results = await analyze({ dir: './src/', apply: ['vue-caution', 'vue-essential', 'vue-recommended', 'vue-strong', 'rrd'], ignore: [], groupBy: 'rule', level: 'all', sortBy: 'asc' })
       console.log(results.codeHealthOutput?.[0].info)
 
 
@@ -40,9 +41,6 @@ export default defineNuxtModule<ModuleOptions>({
           return results
         }
       })
-
-      console.log('RPC object:', rpc)  // output: { broadcast: {} }
-
     })
   }
 })
