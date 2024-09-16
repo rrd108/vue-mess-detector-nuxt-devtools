@@ -30,14 +30,12 @@ export default defineNuxtModule<ModuleOptions>({
 
     onDevToolsInitialized(async () => {
       console.log('module:onDevToolsInitialized')
-      console.log('analyze')
-      const results = await analyze({ dir: './src/', apply: FLAT_RULESETS_RULES, ignore: [], groupBy: 'rule', level: 'all', sortBy: 'asc' })
-      console.log(results.codeHealthOutput?.[0].info)
-
 
       const rpc = extendServerRpc<ClientFunctions, ServerFunctions>('vueMessDetector', {
-        async getResults() {
+        getResults: async () => {
+          const results = await analyze({ dir: './src/', apply: FLAT_RULESETS_RULES, ignore: [], groupBy: 'rule', level: 'all', sortBy: 'asc' })
           console.log('getResults() called on server')
+          console.log({ results })
           return results
         }
       })

@@ -5,18 +5,25 @@ import type {
   ClientFunctions,
   ServerFunctions,
 } from "../../rpc-types";
+import type { BirpcReturn } from "birpc";
 
 const result = ref<AnalysisResult>({} as AnalysisResult);
 
+const showButton = ref(false);
+let rpc: BirpcReturn<ServerFunctions, ClientFunctions>;
+
+const getAnalysisReport = async () => {
+  result.value = await rpc.getResults();
+};
+
 onDevtoolsClientConnected(async (client) => {
   console.log("onDevtoolsClientConnected");
-  const rpc = client.devtools.extendClientRpc<ServerFunctions, ClientFunctions>(
+  rpc = client.devtools.extendClientRpc<ServerFunctions, ClientFunctions>(
     "vueMessDetector",
-    { _doNothing: () => {} }
+    { _doNothing: () => {} },
   );
-
-  result.value = await rpc.getResults();
-  console.log(result.value);
+  getAnalysisReport();
+  showButton.value = true;
 });
 
 const htmlize = (str: string) => {
@@ -24,7 +31,7 @@ const htmlize = (str: string) => {
     /(\bhttps:\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gi;
   str = str.replace(
     urlPattern,
-    '🔗 <a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
+    '🔗 <a href="$1" target="_blank" rel="noopener noreferrer">$1</a>',
   );
 
   return str
@@ -41,46 +48,69 @@ const htmlize = (str: string) => {
 </script>
 
 <template>
-  <div>
-    <h1>Vue Mess Detector Analysis</h1>
-    <h2>Overview</h2>
-    <ul>
-      <li v-for="item in result.output">
-        <p v-html="htmlize(item.info)"></p>
-      </li>
-    </ul>
+  <section>
+    <h1>
+      Vue Mess Detector Analysis
 
-    <h2>Report</h2>
-    <ul>
-      <li v-for="(item, key) in result.reportOutput">
-        <h3 v-html="htmlize(key)"></h3>
-        <ul>
-          <li v-for="rule in item">
-            <p v-html="htmlize(rule.id)"></p>
-            <p v-html="htmlize(rule.description)"></p>
-            <p v-html="htmlize(rule.message)"></p>
-          </li>
-        </ul>
-      </li>
-    </ul>
+      <button @click="getAnalysisReport" v-show="showButton">
+        Refresh Report
+      </button>
+    </h1>
 
-    <h2>Code Health</h2>
-    <ul>
-      <li v-for="item in result.codeHealthOutput">
-        <p v-html="htmlize(item.info)"></p>
-      </li>
-    </ul>
-  </div>
+    <main v-show="result.output">
+      <h2>Overview</h2>
+      <ul>
+        <li v-for="item in result.output">
+          <p v-html="htmlize(item.info)"></p>
+        </li>
+      </ul>
+
+      <h2>Analysis Report</h2>
+      <ul>
+        <li v-for="(item, key) in result.reportOutput">
+          <h3 v-html="htmlize(key)"></h3>
+          <ul>
+            <li v-for="message in item">
+              <p v-html="htmlize(message.id)"></p>
+              <p v-html="htmlize(message.description)"></p>
+              <p v-html="htmlize(message.message)"></p>
+            </li>
+          </ul>
+        </li>
+      </ul>
+
+      <h2>Code Health</h2>
+      <ul>
+        <li v-for="item in result.codeHealthOutput">
+          <p v-html="htmlize(item.info)"></p>
+        </li>
+      </ul>
+    </main>
+  </section>
 </template>
 
 <style scoped>
-div {
+section {
   padding: 0.5rem;
 }
+
 h1 {
   font-size: 2rem;
   margin-top: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
+button {
+  background-color: #2ecc71;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25em;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
 h2 {
   font-size: 1.5rem;
   margin-top: 1.5rem;
