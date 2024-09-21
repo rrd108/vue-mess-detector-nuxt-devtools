@@ -1,8 +1,8 @@
 import { defineNuxtModule, addPlugin, createResolver } from '@nuxt/kit'
-import { setupDevToolsUI } from './devtools'
 import { extendServerRpc, onDevToolsInitialized } from '@nuxt/devtools-kit'
 import { analyze, FLAT_RULES } from 'vue-mess-detector'
 import type { ClientFunctions, ServerFunctions } from '../rpc-types'
+import { setupDevToolsUI } from './devtools'
 
 export interface ModuleOptions {
   devtools: boolean
@@ -32,9 +32,8 @@ export default defineNuxtModule<ModuleOptions>({
         getResults: async () => {
           const results = await analyze({ dir: './src/', apply: FLAT_RULES })
           return results
-        }
+        },
       })
     })
-  }
+  },
 })
-

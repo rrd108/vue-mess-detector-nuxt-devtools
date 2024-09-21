@@ -1,52 +1,53 @@
 <script setup lang="ts">
-import { onDevtoolsClientConnected } from "@nuxt/devtools-kit/iframe-client";
+import { onDevtoolsClientConnected } from '@nuxt/devtools-kit/iframe-client'
+import type { BirpcReturn } from 'birpc'
 import type {
   AnalysisResult,
   ClientFunctions,
   ServerFunctions,
-} from "../../rpc-types";
-import type { BirpcReturn } from "birpc";
+} from '../../rpc-types'
+import { ref } from '#imports'
 
-const results = ref<AnalysisResult>({} as AnalysisResult);
-const loading = ref(false);
+const results = ref<AnalysisResult>({} as AnalysisResult)
+const loading = ref(false)
 
-const showButton = ref(false);
-let rpc: BirpcReturn<ServerFunctions, ClientFunctions>;
+const showButton = ref(false)
+let rpc: BirpcReturn<ServerFunctions, ClientFunctions>
 
 const getAnalysisReport = async () => {
-  loading.value = true;
-  results.value = await rpc.getResults();
-  loading.value = false;
-};
+  loading.value = true
+  results.value = await rpc.getResults()
+  loading.value = false
+}
 
 onDevtoolsClientConnected(async (client) => {
   rpc = client.devtools.extendClientRpc<ServerFunctions, ClientFunctions>(
-    "vueMessDetector",
+    'vueMessDetector',
     { _doNothing: () => {} },
-  );
-  getAnalysisReport();
-  showButton.value = true;
-});
+  )
+  getAnalysisReport()
+  showButton.value = true
+})
 
 const htmlize = (str: string) => {
-  const urlPattern =
-    /(\bhttps:\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gi;
+  const urlPattern
+    = /(\bhttps:\/\/[-\w+&@#/%?=~|!:,.;]*[-\w+&@#/%=~|])/gi
   str = str.replace(
     urlPattern,
     '🔗 <a href="$1" target="_blank" rel="noopener noreferrer">$1</a>',
-  );
+  )
 
   return str
     .replace(/<bg_err>/g, '<span class="bg-err">')
     .replace(/<bg_warn>/g, '<span class="bg-warn">')
     .replace(/<bg_info>/g, '<span class="bg-info">')
     .replace(/<bg_ok>/g, '<span class="bg-ok">')
-    .replace(/<\/bg_err>|<\/bg_warn>|<\/bg_info>|<\/bg_ok>/g, "</span>")
+    .replace(/<\/bg_err>|<\/bg_warn>|<\/bg_info>|<\/bg_ok>/g, '</span>')
     .replace(/<text_warn>/g, '<span class="text-warn">')
     .replace(/<text_info>/g, '<span class="text-info">')
-    .replace(/<\/text_warn>|<\/text_info>/g, "</span>")
-    .replace(/\n/g, "<br>");
-};
+    .replace(/<\/text_warn>|<\/text_info>/g, '</span>')
+    .replace(/\n/g, '<br>')
+}
 </script>
 
 <template>
@@ -54,7 +55,10 @@ const htmlize = (str: string) => {
     <h1>
       Vue Mess Detector Analysis
 
-      <button @click="getAnalysisReport" v-show="showButton">
+      <button
+        v-show="showButton"
+        @click="getAnalysisReport"
+      >
         Refresh Report
       </button>
     </h1>
@@ -67,19 +71,19 @@ const htmlize = (str: string) => {
       <h2>Overview</h2>
       <ul>
         <li v-for="item in results.output">
-          <p v-html="htmlize(item.info)"></p>
+          <p v-html="htmlize(item.info)" />
         </li>
       </ul>
 
       <h2>Analysis Report</h2>
       <ul>
         <li v-for="(item, key) in results.reportOutput">
-          <h3 v-html="htmlize(key)"></h3>
+          <h3 v-html="htmlize(key)" />
           <ul>
             <li v-for="message in item">
-              <p v-html="htmlize(message.id)"></p>
-              <p v-html="htmlize(message.description)"></p>
-              <p v-html="htmlize(message.message)"></p>
+              <p v-html="htmlize(message.id)" />
+              <p v-html="htmlize(message.description)" />
+              <p v-html="htmlize(message.message)" />
             </li>
           </ul>
         </li>
@@ -88,7 +92,7 @@ const htmlize = (str: string) => {
       <h2>Code Health</h2>
       <ul>
         <li v-for="item in results.codeHealthOutput">
-          <p v-html="htmlize(item.info)"></p>
+          <p v-html="htmlize(item.info)" />
         </li>
       </ul>
     </main>

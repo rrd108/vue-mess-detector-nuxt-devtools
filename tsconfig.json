@@ -1,6 +1,8 @@
 {
-  "extends": "./client/.nuxt/tsconfig.json",
-  "compilerOptions": {
-    "preserveSymlinks": true
-  }
+  "extends": "./.nuxt/tsconfig.json",
+  "exclude": [
+    "dist",
+    "node_modules",
+    "playground",
+  ]
 }
