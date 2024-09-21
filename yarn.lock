@@ -7522,10 +7522,10 @@ vue-eslint-parser@^9.1.0, vue-eslint-parser@^9.4.3:
     lodash "^4.17.21"
     semver "^7.3.6"
 
-vue-mess-detector@^0.51.0:
-  version "0.51.0"
-  resolved "https://registry.yarnpkg.com/vue-mess-detector/-/vue-mess-detector-0.51.0.tgz#7b96e2b437f05880a1ccacf9be71775e8a4f41ff"
-  integrity sha512-d2n+4yF1ggZppUcjjXbql2V7hJtUx+MOgkcnQTP64Ms3nK5tn7Bk0uUIZHWDfgEod4EaFCcOdqlMbgWnA8oeEg==
+vue-mess-detector@^0.53.0:
+  version "0.53.0"
+  resolved "https://registry.yarnpkg.com/vue-mess-detector/-/vue-mess-detector-0.53.0.tgz#b7de71df841f355ef37988a0d354f8b457545465"
+  integrity sha512-aibn9zBa1hSjNjYb6AX/y59fqkv91V3leLF+S78CNL9YSqH2uc4h1psfOUFyiIs7ikkBjky4YHChz6X3Vbl2sw==
   dependencies:
     "@vue/compiler-sfc" "^3.4.27"
     cli-table3 "^0.6.5"

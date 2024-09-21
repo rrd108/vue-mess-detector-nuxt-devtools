@@ -7,17 +7,19 @@ import type {
 } from "../../rpc-types";
 import type { BirpcReturn } from "birpc";
 
-const result = ref<AnalysisResult>({} as AnalysisResult);
+const results = ref<AnalysisResult>({} as AnalysisResult);
+const loading = ref(false);
 
 const showButton = ref(false);
 let rpc: BirpcReturn<ServerFunctions, ClientFunctions>;
 
 const getAnalysisReport = async () => {
-  result.value = await rpc.getResults();
+  loading.value = true;
+  results.value = await rpc.getResults();
+  loading.value = false;
 };
 
 onDevtoolsClientConnected(async (client) => {
-  console.log("onDevtoolsClientConnected");
   rpc = client.devtools.extendClientRpc<ServerFunctions, ClientFunctions>(
     "vueMessDetector",
     { _doNothing: () => {} },
@@ -57,17 +59,21 @@ const htmlize = (str: string) => {
       </button>
     </h1>
 
-    <main v-show="result.output">
+    <main v-show="loading">
+      <h2>Loading...</h2>
+    </main>
+
+    <main v-show="!loading && results.output">
       <h2>Overview</h2>
       <ul>
-        <li v-for="item in result.output">
+        <li v-for="item in results.output">
           <p v-html="htmlize(item.info)"></p>
         </li>
       </ul>
 
       <h2>Analysis Report</h2>
       <ul>
-        <li v-for="(item, key) in result.reportOutput">
+        <li v-for="(item, key) in results.reportOutput">
           <h3 v-html="htmlize(key)"></h3>
           <ul>
             <li v-for="message in item">
@@ -81,7 +87,7 @@ const htmlize = (str: string) => {
 
       <h2>Code Health</h2>
       <ul>
-        <li v-for="item in result.codeHealthOutput">
+        <li v-for="item in results.codeHealthOutput">
           <p v-html="htmlize(item.info)"></p>
         </li>
       </ul>

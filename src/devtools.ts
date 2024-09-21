@@ -7,7 +7,6 @@ const DEVTOOLS_UI_ROUTE = '/__vue-mess-detector'
 const DEVTOOLS_UI_LOCAL_PORT = 3300
 
 export function setupDevToolsUI(nuxt: Nuxt, resolver: Resolver) {
-  console.log('devtools:setupDevToolsUI')
   const clientPath = resolver.resolve('./client')
   const isProductionBuild = existsSync(clientPath)
 
