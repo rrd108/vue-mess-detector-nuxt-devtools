@@ -1,56 +1,52 @@
-<!--
-Get your module up and running quickly.
-
-Find and replace all on all files (CMD+SHIFT+F):
-- Name: Vue Mess Detector
-- Package name: vue-mess-detector
-- Description: My new Nuxt module
--->
-
-# Vue Mess Detector TODO
+# Vue Mess Detector Nuxt Devtools Plugin
 
 [![npm version][npm-version-src]][npm-version-href]
 [![npm downloads][npm-downloads-src]][npm-downloads-href]
 [![License][license-src]][license-href]
 [![Nuxt][nuxt-src]][nuxt-href]
 
-My new Nuxt module integrated with the [Nuxt Devtools](https://github.com/nuxt/devtools).
+Vue Mess Detector module integrated with the [Nuxt Devtools](https://github.com/nuxt/devtools).
 
-- [✨ &nbsp;Release Notes](/CHANGELOG.md)
-<!-- - [📖 &nbsp;Documentation](https://example.com) -->
+[Vue Mess Detector](https://vue-mess-detector.webmania.cc/) is a comprehensive code analysis and quality assessment tool.
+That provides actionable insights into code health, helping developers identify and resolve potential issues in Vue.js and Nuxt.js projects.
+
+This package contains only the devtools integration; Vue Mess Detector is added as a dependency. 
 
 ## Features
 
-<!-- Highlight some of the features your module provide here -->
-
-- ⛰ &nbsp;Foo
-- 🚠 &nbsp;Bar
-- 🌲 &nbsp;Baz
+- 😻 NPM and JSR Support
+- 🤖 PNPM, Bun, Yarn and NPM
+- 🔩 Focus on Important Rules
+- 🚀 Run the analyzer directly from dev tools
 
 ## Quick Setup
 
-1. Add `vue-mess-detector` dependency to your project
+1. Add `vue-mess-detector-nuxt-devtools` dependency to your project
 
 ```bash
 # Using pnpm
-pnpm add -D vue-mess-detector
+pnpm add -D vue-mess-detector-nuxt-devtools
 
 # Using yarn
-yarn add --dev vue-mess-detector
+yarn add --dev vue-mess-detector-nuxt-devtools
 
 # Using npm
-npm install --save-dev vue-mess-detector
+npm install --save-dev vue-mess-detector-nuxt-devtools
 ```
 
-2. Add `vue-mess-detector` to the `modules` section of `nuxt.config.ts`
+2. Add `vue-mess-detector-nuxt-devtools` to the `modules` section of `nuxt.config.ts`
 
 ```js
 export default defineNuxtConfig({
-  modules: ["vue-mess-detector"],
+  modules: ["vue-mess-detector-nuxt-devtools"],
 });
 ```
 
 That's it! You can now use Vue Mess Detector in your Nuxt app ✨
+
+## Screenshot
+
+![Vue Mess Detector Nuxt Devtools](vue-mess-detector-nuxt-devtools.png)
 
 ## Development
 
@@ -80,11 +76,11 @@ npm run release
 
 <!-- Badges -->
 
-[npm-version-src]: https://img.shields.io/npm/v/vue-mess-detector/latest.svg?style=flat&colorA=18181B&colorB=28CF8D
-[npm-version-href]: https://npmjs.com/package/vue-mess-detector
-[npm-downloads-src]: https://img.shields.io/npm/dm/vue-mess-detector.svg?style=flat&colorA=18181B&colorB=28CF8D
-[npm-downloads-href]: https://npmjs.com/package/vue-mess-detector
-[license-src]: https://img.shields.io/npm/l/vue-mess-detector.svg?style=flat&colorA=18181B&colorB=28CF8D
-[license-href]: https://npmjs.com/package/vue-mess-detector
+[npm-version-src]: https://img.shields.io/npm/v/vue-mess-detector-nuxt-devtools/latest.svg?style=flat&colorA=18181B&colorB=28CF8D
+[npm-version-href]: https://npmjs.com/package/vue-mess-detector-nuxt-devtools
+[npm-downloads-src]: https://img.shields.io/npm/dm/vue-mess-detector-nuxt-devtools.svg?style=flat&colorA=18181B&colorB=28CF8D
+[npm-downloads-href]: https://npmjs.com/package/vue-mess-detector-nuxt-devtools
+[license-src]: https://img.shields.io/npm/l/vue-mess-detector-nuxt-devtools.svg?style=flat&colorA=18181B&colorB=28CF8D
+[license-href]: https://npmjs.com/package/vue-mess-detector-nuxt-devtools
 [nuxt-src]: https://img.shields.io/badge/Nuxt-18181B?logo=nuxt.js
 [nuxt-href]: https://nuxt.com
