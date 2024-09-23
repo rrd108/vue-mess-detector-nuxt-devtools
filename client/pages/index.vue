@@ -1,3 +1,5 @@
+<!-- eslint-disable vue/no-v-html -->
+<!-- eslint-disable vue/no-v-html -->
 <script setup lang="ts">
 import { onDevtoolsClientConnected } from '@nuxt/devtools-kit/iframe-client'
 import type { BirpcReturn } from 'birpc'
@@ -30,8 +32,7 @@ onDevtoolsClientConnected(async (client) => {
 })
 
 const htmlize = (str: string) => {
-  const urlPattern
-    = /(\bhttps:\/\/[-\w+&@#/%?=~|!:,.;]*[-\w+&@#/%=~|])/gi
+  const urlPattern = /(\bhttps:\/\/[-\w+&@#/%?=~|!:,.;]*[-\w+&@#/%=~|])/gi
   str = str.replace(
     urlPattern,
     '🔗 <a href="$1" target="_blank" rel="noopener noreferrer">$1</a>',
@@ -70,17 +71,26 @@ const htmlize = (str: string) => {
     <main v-show="!loading && results.output">
       <h2>Overview</h2>
       <ul>
-        <li v-for="item in results.output">
+        <li
+          v-for="item in results.output"
+          :key="item.info"
+        >
           <p v-html="htmlize(item.info)" />
         </li>
       </ul>
 
       <h2>Analysis Report</h2>
       <ul>
-        <li v-for="(item, key) in results.reportOutput">
+        <li
+          v-for="(item, key) in results.reportOutput"
+          :key="key"
+        >
           <h3 v-html="htmlize(key)" />
           <ul>
-            <li v-for="message in item">
+            <li
+              v-for="message in item"
+              :key="message.id"
+            >
               <p v-html="htmlize(message.id)" />
               <p v-html="htmlize(message.description)" />
               <p v-html="htmlize(message.message)" />
@@ -91,7 +101,10 @@ const htmlize = (str: string) => {
 
       <h2>Code Health</h2>
       <ul>
-        <li v-for="item in results.codeHealthOutput">
+        <li
+          v-for="item in results.codeHealthOutput"
+          :key="item.info"
+        >
           <p v-html="htmlize(item.info)" />
         </li>
       </ul>

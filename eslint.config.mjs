@@ -16,5 +16,18 @@ export default createConfigForNuxt({
   },
 })
   .append(
-    // your custom flat config here...
+    // Add the rule configuration here
+    {
+      rules: {
+        'no-console': 'off',
+        'no-debugger': 'off',
+        'semi': ['error', 'never'],
+        'eqeqeq': 'off',
+        'eol-last': ['error', 'always'],
+        'comma-dangle': ['error', 'always-multiline'], 'vue/multi-word-component-names': ['error', {
+          ignores: ['index'],
+        }],
+        'vue/no-v-html': 'off',
+      },
+    },
   )
