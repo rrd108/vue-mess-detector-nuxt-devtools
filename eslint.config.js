@@ -10,8 +10,10 @@ export default createConfigForNuxt({
     stylistic: true,
   },
   dirs: {
-    src: [
-      './playground',
+    root: [
+      '',
+      'playground',
+      'client',
     ],
   },
 })

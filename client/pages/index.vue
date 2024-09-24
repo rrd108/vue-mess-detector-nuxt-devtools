@@ -152,7 +152,7 @@ ul ul li:nth-child(even) {
   background-color: #222;
 }
 
-:deep a {
+:deep(a) {
   text-decoration: underline;
 }
 :deep(.bg-info) {

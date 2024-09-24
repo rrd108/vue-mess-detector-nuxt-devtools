@@ -30,7 +30,7 @@ export default defineNuxtModule<ModuleOptions>({
     onDevToolsInitialized(async () => {
       extendServerRpc<ClientFunctions, ServerFunctions>('vueMessDetector', {
         getResults: async () => {
-          const results = await analyze({ dir: './src/', apply: FLAT_RULES })
+          const results = await analyze({ dir: './', apply: FLAT_RULES })
           return results
         },
       })
