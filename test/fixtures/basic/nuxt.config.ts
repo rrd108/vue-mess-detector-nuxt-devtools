@@ -1,7 +1,8 @@
 import vueMessDetector from '../../../src/module'
 
 export default defineNuxtConfig({
-  modules: [
-    vueMessDetector,
-  ],
+  devtools: {
+    enabled: true,
+  },
+  modules: [vueMessDetector],
 })
