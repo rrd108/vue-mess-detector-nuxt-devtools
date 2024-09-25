@@ -2,7 +2,6 @@ import { describe, it, expect, vi } from 'vitest'
 import { addCustomTab } from '@nuxt/devtools-kit'
 import type { Nuxt } from '@nuxt/schema'
 import type { Resolver } from '@nuxt/kit'
-import { analyze } from 'vue-mess-detector'
 import { setupDevToolsUI } from '../src/devtools'
 
 vi.mock('@nuxt/devtools-kit', () => ({
