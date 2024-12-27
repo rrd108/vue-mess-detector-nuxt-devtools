@@ -22,10 +22,8 @@ describe('setupDevToolsUI', () => {
       resolve: vi.fn().mockReturnValue('./client'),
     } as unknown as Resolver
 
-    // Call the function
     setupDevToolsUI(mockNuxt, mockResolver)
 
-    // Check if addCustomTab was called with the correct parameters
     expect(addCustomTab).toHaveBeenCalledWith({
       name: 'vue-mess-detector',
       title: 'Vue Mess Detector',
@@ -35,5 +33,39 @@ describe('setupDevToolsUI', () => {
         src: '/__vue-mess-detector',
       },
     })
+  })
+
+  it('sets up production middleware when client path exists', () => {
+    vi.mock('node:fs', () => ({
+      existsSync: () => true,
+    }))
+
+    const mockNuxt = {
+      hook: vi.fn(),
+    } as unknown as Nuxt
+    const mockResolver = {
+      resolve: vi.fn().mockReturnValue('./client'),
+    } as unknown as Resolver
+
+    setupDevToolsUI(mockNuxt, mockResolver)
+
+    expect(mockNuxt.hook).toHaveBeenCalledWith('vite:extendConfig', expect.any(Function))
+  })
+
+  it('sets up development proxy when client path does not exist', () => {
+    vi.mock('node:fs', () => ({
+      existsSync: () => false,
+    }))
+
+    const mockNuxt = {
+      hook: vi.fn(),
+    } as unknown as Nuxt
+    const mockResolver = {
+      resolve: vi.fn().mockReturnValue('./client'),
+    } as unknown as Resolver
+
+    setupDevToolsUI(mockNuxt, mockResolver)
+
+    expect(mockNuxt.hook).toHaveBeenCalledWith('vite:extendConfig', expect.any(Function))
   })
 })
