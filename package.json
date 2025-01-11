@@ -18,14 +18,10 @@
     "dist"
   ],
   "scripts": {
-    "prepack": "nuxt-module-build && npm run client:build",
-    "client:build": "nuxi generate client",
-    "client:dev": "nuxi dev client --port 3300",
-    "dev": "npm run play:dev",
-    "dev:prepare": "nuxt-module-build --stub && nuxi prepare client",
-    "prepare": "nuxi prepare client",
-    "play:dev": "nuxi dev playground",
-    "play:prod": "npm run prepack && nuxi dev playground",
+    "prepack": "nuxt-module-build build",
+    "dev": "nuxi dev playground",
+    "dev:build": "nuxi build playground",
+    "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxi prepare playground",
     "release:patch": "yarn lint && yarn test && yarn prepack && changelogen --release --patch && yarn publish && git push --follow-tags",
     "release:minor": "yarn lint && yarn test && yarn prepack && changelogen --release --minor && yarn publish && git push --follow-tags",
     "lint": "eslint .",
